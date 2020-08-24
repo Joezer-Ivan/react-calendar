@@ -1,38 +1,271 @@
-.App {
-  text-align: center;
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+
+.icon {
+  font-family: 'Material Icons', serif;
+  font-style: normal;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
 }
 
-.App-logo {
-  height: 40vmin;
+/* GENERAL */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.5;
+  position: relative;
+}
+header {
+  display: block;
+  width: 100%;
+  padding: 1.75em 0;
+  border-bottom: 1px solid lightgray;
+  background: white;
+  margin: auto;
+  text-align: center;
+} 
+button {
+  padding: 4px 8px;
+  overflow: hidden;
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  transition: background-color .3s;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #b6c3ce;
+}
+.btn-primary {
+  background-color: #2a6fab;
+  color: #ecf0f1;
+}
+.btn-primary:hover {
+  background-color: #134775;
+}
+.flex-bx {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-between {
+  justify-content: space-between;
+}
+.flex-around {
+  justify-content: space-around;
+}
+.pb5 {
+  padding-bottom: 5px;
+}
+.mr5 {
+  margin-right: 10px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.anim-icon {
+  cursor: pointer;
+  transition: .15s ease-out;
+}
+.anim-icon:hover {
+  transform: scale(1.25);
+  transition: .25s ease-out;
+}
+
+/* GRID */
+.row {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.row-middle {
+  align-items: center;
+}
+.column {
+  flex-grow: 1;
+  flex-basis: 0;
+  max-width: 100%;
+}
+
+/* Calendar */
+.calendar {
+  display: block;
+  position: relative;
+  width: 90%;
+  background: white;
+  border: 1px solid lightgray;
+  height: auto;
+  margin: 0 auto;
+}
+.calendar .header {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 115%;
+  padding: 1.5em 0;
+  border-bottom: 1px solid lightgray;
+}
+.calendar .days {
+  text-transform: uppercase;
+  font-weight: 400;
+  color: gray;
+  font-size: 70%;
+  padding: .75em 0;
+  border-bottom: 1px solid lightgray;
+}
+.calendar .body .cell {
+  position: relative;
+  height: 6em;
+  border-right: 1px solid lightgray;
+  overflow: hidden;
+  cursor: pointer;
+  background: white;
+  transition: 0.25s ease-out;
+}
+.calendar .body .cell:hover {
+  background: whitesmoke;
+  transition: 0.5s ease-out;
+}
+.calendar .body .selected {
+  background: #fafad2;
+}
+.calendar .body .row {
+  border-bottom: 1px solid lightgray;
+}
+.calendar .body .row:last-child {
+  border-bottom: none;
+}
+.calendar .body .cell:last-child {
+  border-right: none;
+}
+.calendar .body .cell .number {
+  position: absolute;
+  font-size: 82.5%;
+  line-height: 1;
+  top: .75em;
+  right: .75em;
+  font-weight: 700;
+}
+.calendar .body .disabled {
+  color: lightgray;
   pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.calendar .body .column {
+  flex-grow: 0;
+  flex-basis: calc(100%/7);
+  width: calc(100%/7);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* DAY VIEW */
+.daily-events {
+  width: 500px;
+  height: 900px;
+  max-width: 90%;
+  max-height: 80%;
+}
+
+/* MODAL */
+.modal {
+  z-index: 2;
+  background: white;
+  /* border-radius: 1em; */
+  padding: 1em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.modal .header {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 100%;
+  padding: 0.4em 0;
+  border-bottom: 1px solid lightgray;
+}
+.modalMask {
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* CELL EVENT LIST */
+.ul-no-bullets {
+  list-style-type: none;
+  padding: 5px;
+}
+.cell-event-list li {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 5px;
+  background: rgba(3, 252, 177, 0.2);
+  font-size: small;
+}
+.overflow-banner {
+  z-index: 2;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  background-color: lightgray;
+  font-size: 11px;
 }
 
-.App-link {
-  color: #61dafb;
+/* EVENT CARD */
+.event-card {
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid lightgray;
+}
+.event-card p {
+  margin: 0px;
+}
+.event-subject {
+  font-weight: bolder;
+}
+.event-card .card-title {
+  max-width: 85%;
+}
+.event-card .card-title span{
+  display: inline-block;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+/* EVENT FORM */
+.event-form .form-row{
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+}
+.event-form label::after{
+  content: ' : ';
+  white-space: pre;
+}
+.event-form input{
+  flex-grow: 6;
+}
+.event-form textarea{
+  height: 50px;
+  flex-grow: 6;
+}
+.event-form label {
+  width: 100px;
 }
