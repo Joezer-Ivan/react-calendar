@@ -1,40 +1,58 @@
 import React, {useState, useContext} from 'react'
-import { EventScheduleContext } from './Calendar';
+import { EventScheduleContext } from './Calendar'
+import {isTimeStrInOrder} from '../utils/generalUtils'
 
 function EventForm(props) {
-    const [subject, setSubject] = useState(props.subject || '');
-    const [startTime, setStartTime] = useState(props.startTime || '');
-    const [endTime, setEndTime] = useState(props.endTime || '');
-    const [location, setLocation] = useState(props.location || '');
-    const [description, setDescription] = useState(props.description || '');
-
+    const eventDetails = props.event || {};
+    const [subject, setSubject] = useState(eventDetails.subject || '');
+    const [startTime, setStartTime] = useState(eventDetails.startTime || '');
+    const [endTime, setEndTime] = useState(eventDetails.endTime || '');
+    const [location, setLocation] = useState(eventDetails.location || '');
+    const [description, setDescription] = useState(eventDetails.description || '');
+    const [subjectErrorMessage, setSubjectErrorMessage] = useState('')
+    const [timeErrorMessage, setTimeErrorMessage] = useState('')
     const eventScheduleContext = useContext(EventScheduleContext);
     
+    const validateForm = () => {
+        let isValid = true;
+        if (subject.trim() === ''){
+            setSubjectErrorMessage('Subject cannot be empty');
+            isValid = false;
+        }
+        if (startTime && !isTimeStrInOrder(startTime, endTime)){
+            setTimeErrorMessage('End Time must be ahead of start time')
+            isValid = false;
+        }
+        return isValid;
+    }
     const handleFormSubmit = (ev) => {
         ev.preventDefault();
-        const dispatchType = props.uid ? 'EDIT_EVENT' : 'ADD_EVENT';
-        const uid = props.uid;
-        const event = {
-            uid,
-            subject,
-            startTime,
-            endTime,
-            location,
-            description
-        };
-        eventScheduleContext.eventScheduleDispatch({
-            type : dispatchType,
-            date : props.date,
-            event : event
-        });
-        props.closeFormCallBack();
+        const isValid = validateForm();
+        if (isValid){
+            const dispatchType = eventDetails.uid ? 'EDIT_EVENT' : 'ADD_EVENT';
+            const uid = eventDetails.uid;
+            const event = {
+                uid,
+                subject,
+                startTime,
+                endTime,
+                location,
+                description
+            };
+            eventScheduleContext.eventScheduleDispatch({
+                type : dispatchType,
+                date : props.date,
+                event : event
+            });
+            props.closeFormCallBack();
+        }
     };
 
     return (
         <li className='event-card'>
             <form className='event-form' onSubmit={handleFormSubmit}>
                 <span className="form-row">
-                    <label htmlFor="subject">Subject</label>
+                    <label htmlFor="subject">Subject *</label>
                     <input
                         name="subject"
                         type="type"
@@ -45,6 +63,9 @@ function EventForm(props) {
                         onChange={(ev) => setSubject(ev.target.value)}
                     />
                 </span>
+                {subjectErrorMessage && 
+                    <div className="form-validation-error">{subjectErrorMessage}</div>
+                }
                 <span className="form-row">
                     <label htmlFor="startTime">Start time</label>
                     <input
@@ -62,6 +83,9 @@ function EventForm(props) {
                         onChange={(ev) => setEndTime(ev.target.value)}
                     />
                 </span>
+                {timeErrorMessage && 
+                    <div className="form-validation-error">{timeErrorMessage}</div>
+                }
                 <span className="form-row">
                     <label htmlFor="location">Location</label>
                     <input

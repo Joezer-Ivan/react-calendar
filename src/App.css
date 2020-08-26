@@ -84,6 +84,32 @@ button:hover {
   transform: scale(1.25);
   transition: .25s ease-out;
 }
+.fr {
+  float: right;
+}
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
 
 /* GRID */
 .row {
@@ -230,7 +256,11 @@ button:hover {
 }
 
 /* EVENT CARD */
-.event-card {
+.events-list {
+  overflow-y: auto;
+  height: 470px;
+}
+.events-list li {
   padding-bottom: 5px;
   margin-bottom: 15px;
   border-bottom: 1px solid lightgray;
@@ -268,4 +298,31 @@ button:hover {
 }
 .event-form label {
   width: 100px;
+}
+.form-validation-error {
+  color: red;
+  font-size: 11px;
+  font-weight: bolder;
+}
+
+/* TOAST NOTIFICATION */
+.toast-notification-container{
+  position: fixed;
+  top : 10px;
+  right : 10px;
+  width: 300px;
+}
+.toast-notification {
+  z-index: 5;
+  background: rgba(151, 170, 255, 0.97);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* EXPORT CSV BUTTON */
+.export-csv-button{
+  margin: 20px;
+  position: absolute;
+  right: 5%;
 }

@@ -11,6 +11,16 @@ export const getEventsScheduledForDate = (eventSchedule, dateObj) => {
     return eventsObj;
 };
 
+export const getEventsScheduledForMonth = (eventSchedule, dateObj) => {
+    let eventsObj = {};
+    const year_key = `y_${format(dateObj, 'yyyy')}`;
+    const month_key = `m_${format(dateObj, 'MM')}`;
+    if (eventSchedule[year_key] && eventSchedule[year_key][month_key]){
+        eventsObj = eventSchedule[year_key][month_key];
+    }
+    return eventsObj;
+};
+
 export const get12HourTimeString = (_24HrTimeString) => {
     if (!_24HrTimeString) {return ''}
 
@@ -34,15 +44,24 @@ export const rearrangeMapByEarliest = (map) => {
         if (!map[a].startTime) {return -1}
         if (!map[b].startTime) {return 1}
 
-        const aTimeSplit = map[a].startTime.split(':');
-        const bTimeSplit = map[b].startTime.split(':');
-        
-        let comparisonResult = parseInt(aTimeSplit[0]) - parseInt(bTimeSplit[0]);
-        comparisonResult = (comparisonResult === 0) ? (parseInt(aTimeSplit[1]) - parseInt(bTimeSplit[1])) : comparisonResult;
-        return comparisonResult;
+        return timeComparisionMethod(map[a].startTime, map[b].startTime);
     });
     for (let key of sortedListOfKeys){
         rearrangedMap[key] = map[key];
     }
     return rearrangedMap;
 };
+
+const timeComparisionMethod = (a, b) => {
+    const aTimeSplit = a.split(':');
+    const bTimeSplit = b.split(':');
+    
+    let comparisonResult = parseInt(aTimeSplit[0]) - parseInt(bTimeSplit[0]);
+    comparisonResult = (comparisonResult === 0) ? (parseInt(aTimeSplit[1]) - parseInt(bTimeSplit[1])) : comparisonResult;
+    return comparisonResult;
+}
+
+export const isTimeStrInOrder = (a, b) => {
+    let comparisionResult = timeComparisionMethod(a, b);
+    return (comparisionResult < 0);
+}
