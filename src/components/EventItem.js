@@ -10,7 +10,6 @@ function EventItem(props) {
     const handleDeleteBtnClick = () => {
         eventScheduleContext.eventScheduleDispatch({
             type : 'DELETE_EVENT',
-            date : props.date,
             event : event
         });
     }

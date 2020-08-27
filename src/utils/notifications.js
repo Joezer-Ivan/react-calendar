@@ -20,7 +20,7 @@ export const newDesktopNotification = (event) => {
     else if (Notification.permission !== "denied") {
         Notification.requestPermission().then(function (permission) {
             if (permission === "granted") {
-                new Notification("Hi there!");
+                new Notification(title, options);
             }
         });
     }

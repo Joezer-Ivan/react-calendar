@@ -1,12 +1,12 @@
 import React, {useState, useContext} from 'react'
 import { EventScheduleContext } from './Calendar'
-import {isTimeStrInOrder} from '../utils/generalUtils'
+import { isTimeStrInOrder, convertDateObjToTimeString, convertTimeStringToDateObj } from '../utils/generalUtils'
 
 function EventForm(props) {
     const eventDetails = props.event || {};
     const [subject, setSubject] = useState(eventDetails.subject || '');
-    const [startTime, setStartTime] = useState(eventDetails.startTime || '');
-    const [endTime, setEndTime] = useState(eventDetails.endTime || '');
+    const [startTimeString, setStartTimeString] = useState(convertDateObjToTimeString(eventDetails.startDateTime) || '08:00');
+    const [endTimeString, setEndTimeString] = useState(convertDateObjToTimeString(eventDetails.endDateTime) || '18:00');
     const [location, setLocation] = useState(eventDetails.location || '');
     const [description, setDescription] = useState(eventDetails.description || '');
     const [subjectErrorMessage, setSubjectErrorMessage] = useState('')
@@ -15,13 +15,24 @@ function EventForm(props) {
     
     const validateForm = () => {
         let isValid = true;
+        let subjectError = '';
+        let timeError = '';
         if (subject.trim() === ''){
-            setSubjectErrorMessage('Subject cannot be empty');
+            subjectError = 'Subject cannot be empty';
             isValid = false;
         }
-        if (startTime && !isTimeStrInOrder(startTime, endTime)){
-            setTimeErrorMessage('End Time must be ahead of start time')
+        if (startTimeString.trim() === '' || endTimeString.trim() === ''){
+            timeError = 'Start and End time cannot be empty';
             isValid = false;
+        }
+        if (!isTimeStrInOrder(startTimeString, endTimeString)){
+            timeError = 'End Time must be ahead of start time';
+            isValid = false;
+        }
+
+        if (!isValid){
+            setSubjectErrorMessage(subjectError);
+            setTimeErrorMessage(timeError);
         }
         return isValid;
     }
@@ -34,14 +45,13 @@ function EventForm(props) {
             const event = {
                 uid,
                 subject,
-                startTime,
-                endTime,
                 location,
-                description
+                description,
+                startDateTime : convertTimeStringToDateObj(startTimeString, props.date),
+                endDateTime : convertTimeStringToDateObj(endTimeString, props.date),
             };
             eventScheduleContext.eventScheduleDispatch({
                 type : dispatchType,
-                date : props.date,
                 event : event
             });
             props.closeFormCallBack();
@@ -72,15 +82,15 @@ function EventForm(props) {
                         className="mr10"
                         name="startTime"
                         type="time"
-                        value={startTime}
-                        onChange={(ev) => setStartTime(ev.target.value)}
+                        value={startTimeString}
+                        onChange={(ev) => setStartTimeString(ev.target.value)}
                     />
                     <label htmlFor="endTime">End time</label>
                     <input
                         name="endTime"
                         type="time"
-                        value={endTime}
-                        onChange={(ev) => setEndTime(ev.target.value)}
+                        value={endTimeString}
+                        onChange={(ev) => setEndTimeString(ev.target.value)}
                     />
                 </span>
                 {timeErrorMessage && 

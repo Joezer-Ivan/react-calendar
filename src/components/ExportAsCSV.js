@@ -1,7 +1,8 @@
 import React, {useContext} from 'react'
 import {setDate, format} from 'date-fns'
-import {getEventsScheduledForMonth} from '../utils/generalUtils'
+import {getEventsScheduledForMonth, convertDateObjToTimeString} from '../utils/generalUtils'
 import { EventScheduleContext } from './Calendar';
+import {DATE_FORMAT} from '../constants/dateFnsFormats';
 
 function ExportAsCSV(props) {
     const eventScheduleContext = useContext(EventScheduleContext);
@@ -9,28 +10,27 @@ function ExportAsCSV(props) {
     const constructEventsArray = () => {
         const eventsArray = [['Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Location', 'Description']];
         const eventsObj = getEventsScheduledForMonth(eventScheduleContext.eventSchedule, props.currentMonth);
-        const dateFormat = 'dd/MM/yy';
         for (let dayKey in eventsObj){
             const dayStr = dayKey.split('_')[1];
             const dateObjForEvent = setDate(props.currentMonth, parseInt(dayStr));
-            const formattedDate = format(dateObjForEvent, dateFormat);
+            const formattedDateString = format(dateObjForEvent, DATE_FORMAT.exportDate);
             const daysEventsObj = eventsObj[dayKey];
             for (let eventUid in daysEventsObj){
-                const {subject, startTime, endTime, location, description} = daysEventsObj[eventUid];
-                eventsArray.push([subject, formattedDate, startTime, formattedDate, endTime, location, description]);
+                const {subject, startDateTime, endDateTime, location, description} = daysEventsObj[eventUid];
+                const startTimeString = convertDateObjToTimeString(startDateTime);
+                const endTimeString = convertDateObjToTimeString(endDateTime);
+                eventsArray.push([subject, formattedDateString, startTimeString, formattedDateString, endTimeString, location, description]);
             }
         }
         return eventsArray;
     }
 
     const exportToCSV = (fileName, rows) => {
+        // TODO :: rewrite
         const getRowStr = (row) => {
             let finalVal = '';
             for (let j = 0; j < row.length; j++) {
-                let innerValue = row[j] === null ? '' : row[j].toString();
-                if (row[j] instanceof Date) {
-                    innerValue = row[j].toLocaleString();
-                };
+                let innerValue = row[j] === null ? '' : row[j].toString()
                 let result = innerValue.replace(/"/g, '""');
                 if (result.search(/("|,|\n)/g) >= 0){
                     result = '"' + result + '"';
@@ -63,7 +63,7 @@ function ExportAsCSV(props) {
 
     const handleExportClick = () => {
         const eventsArray = constructEventsArray();
-        const fileName = `Events for ${format(props.currentMonth, 'LLLL')}`;
+        const fileName = `Events for ${format(props.currentMonth, DATE_FORMAT.monthName)}`;
         exportToCSV(fileName, eventsArray);
     }
 

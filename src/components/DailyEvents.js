@@ -4,9 +4,9 @@ import {EventScheduleContext} from './Calendar';
 import {getEventsScheduledForDate} from '../utils/generalUtils'
 import EventItem from './EventItem';
 import EventForm from './EventForm';
+import {DATE_FORMAT} from '../constants/dateFnsFormats';
 
 function DailyEvents(props) {
-    const dateFormat = 'dd MMMM yyyy';
     const [showNewEventForm, setShowNewEventForm] = useState(false);
     const eventScheduleContext = useContext(EventScheduleContext);
     const eventsObj = getEventsScheduledForDate(eventScheduleContext.eventSchedule, props.selectedDate);
@@ -23,7 +23,7 @@ function DailyEvents(props) {
             <div className="modalMask" onClick={() => props.setEventsView(false)}></div>
             <div className="popover modal daily-events">
                 <div className="header flex-bx flex-between">
-                    <span>{format(props.selectedDate, dateFormat)}</span>
+                    <span>{format(props.selectedDate, DATE_FORMAT.fullDate)}</span>
                     <div>
                         <button className='mr10 btn-primary' onClick={() => setShowNewEventForm(true)}>
                             <span className="icon">add</span>

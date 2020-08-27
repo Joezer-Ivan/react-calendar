@@ -1,5 +1,6 @@
-import React from 'react'
-import {get12HourTimeString} from '../utils/generalUtils'
+import React from 'react';
+import {format} from 'date-fns';
+import {DATE_FORMAT} from '../constants/dateFnsFormats';
 
 function EventCard(props) {
     return (
@@ -7,8 +8,8 @@ function EventCard(props) {
             <div className='flex-bx flex-between row-middle pb5'>
                 <div className='card-title'>
                     <span className='event-subject mr10'>{props.event.subject}</span>
-                    {props.event.startTime &&
-                        <span>{get12HourTimeString(props.event.startTime)} - {get12HourTimeString(props.event.endTime)}</span>
+                    {props.event.startDateTime &&
+                        <span>{format(props.event.startDateTime, DATE_FORMAT.timeStr_12Hr)} - {format(props.event.endDateTime, DATE_FORMAT.timeStr_12Hr)}</span>
                     }
                 </div>
                 {props.showEditOptions && 

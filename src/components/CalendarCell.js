@@ -1,13 +1,13 @@
 import React, {useState, useContext, useEffect, useRef} from 'react'
 import {format, isSameMonth, isSameDay} from 'date-fns';
 import { EventScheduleContext } from './Calendar';
-import {getEventsScheduledForDate, get12HourTimeString} from '../utils/generalUtils';
+import {getEventsScheduledForDate} from '../utils/generalUtils';
+import {DATE_FORMAT} from '../constants/dateFnsFormats';
 
 function CalendarCell(props) {
     const cellContainerRef = useRef(null);
     const [eventListOverflow, setEventListOverflow] = useState(false);
     const eventScheduleContext = useContext(EventScheduleContext);
-    const dateFormat = "d";
     const eventsObj = getEventsScheduledForDate(eventScheduleContext.eventSchedule, props.day);
     const eventList = [];
     
@@ -15,8 +15,8 @@ function CalendarCell(props) {
         const event = eventsObj[eventId];
         eventList.push(
             <li key={eventId}>
-                {event.startTime && 
-                    <span className='mr5'>{get12HourTimeString(event.startTime)}</span>
+                {event.startDateTime && 
+                    <span className='mr5'>{format(event.startDateTime, DATE_FORMAT.timeStr_12Hr)}</span>
                 }
                 <span className='event-subject'>{event.subject}</span>
             </li>
@@ -27,15 +27,17 @@ function CalendarCell(props) {
         (cellContainerRef.current.scrollHeight - cellContainerRef.current.clientHeight) > 0 ? setEventListOverflow(true) : setEventListOverflow(false);
     }, [eventsObj])
     
+    let conditionalClassNames = '';
+    if (!isSameMonth(props.day, props.monthStart)){ conditionalClassNames += ' disabled' };
+    if (isSameDay(props.day, props.todaysDate)){ conditionalClassNames += ' highlighted' };
+
     return(
         <div
-            className={`column cell ${!isSameMonth(props.day, props.monthStart)
-                ? "disabled" : isSameDay(props.day, props.todaysDate)
-                    ? "selected" : ""}`}
+            className={`column cell ${conditionalClassNames}`}
             ref={cellContainerRef}
             onClick={() => props.onDateClick(props.day)}
         >
-            <span className="number">{format(props.day, dateFormat)}</span>
+            <span className="number">{format(props.day, DATE_FORMAT.dayOfMonth)}</span>
             <ul className="ul-no-bullets cell-event-list">{eventList}</ul>
             {eventListOverflow &&
                 <span className='overflow-banner'>...more events</span>
