@@ -13,6 +13,7 @@ const fetchEvents = () => {
     return JSON.parse(jsonStr);
 }
 
+// fetch events from local storage, and set the start and end time to dateTime objects of the browser's current timezone
 export const getEventsFromLocalStorage = () => {
     const formattedEventsObj = {};
     const eventsObj = fetchEvents();
@@ -23,6 +24,7 @@ export const getEventsFromLocalStorage = () => {
     return formattedEventsObj;
 }
 
+// convert start and end time from user's local timezone to UTC and then persist events list in localstorage
 export const setEventsToLocalStorage = (action, event) => {
     const eventsObj = fetchEvents();
     convertDateTimeObjToUtcString(event);

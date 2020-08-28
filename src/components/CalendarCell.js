@@ -24,6 +24,7 @@ function CalendarCell(props) {
     }
 
     useEffect(() => {
+        // show a more items label if events list overflow out of the cell
         (cellContainerRef.current.scrollHeight - cellContainerRef.current.clientHeight) > 0 ? setEventListOverflow(true) : setEventListOverflow(false);
     }, [eventsObj])
     

@@ -2,29 +2,17 @@ import {format} from 'date-fns';
 import {DATE_FORMAT} from '../constants/dateFnsFormats';
 
 const rearrangeMapByEarliest = (map) => {
+    // JS Objects retain the order in which keys are added... If this fails in some browsers, rewrite this to maintain the order as a seperate array.
     const listOfKeys = Object.keys(map);
     const rearrangedMap = {};
     const sortedListOfKeys = listOfKeys.sort((a, b) => {
-        if ((!map[a].startDateTime && !map[b].startDateTime) || (map[a].startDateTime === map[b].startDateTime)){return 0}
-        if (!map[a].startDateTime) {return -1}
-        if (!map[b].startDateTime) {return 1}
-        
-        return (map[a].startDateTime < map[b].startDateTime) ? 1 : -1;
+        return (map[a].startDateTime < map[b].startDateTime) ? -1 : 1;
     });
     for (let key of sortedListOfKeys){
         rearrangedMap[key] = map[key];
     }
     return rearrangedMap;
 };
-
-const timeComparisionMethod = (a, b) => {
-    const aTimeSplit = a.split(':');
-    const bTimeSplit = b.split(':');
-    
-    let comparisonResult = parseInt(aTimeSplit[0]) - parseInt(bTimeSplit[0]);
-    comparisonResult = (comparisonResult === 0) ? (parseInt(aTimeSplit[1]) - parseInt(bTimeSplit[1])) : comparisonResult;
-    return comparisonResult;
-}
 
 export const getEventsScheduledForDate = (eventSchedule, dateObj) => {
     let eventsObj = {};
@@ -62,11 +50,27 @@ export const get12HourTimeString = (_24HrTimeString) => {
     return `${hourStr}:${minStr} ${period}`;
 }
 
-export const isTimeStrInOrder = (a, b) => {
-    let comparisionResult = timeComparisionMethod(a, b);
-    return (comparisionResult < 0);
+export const isTimeStrInAscendingOrder = (a, b) => {
+    const aTimeSplit = a.split(':');
+    const bTimeSplit = b.split(':');
+    let comparisonResult = parseInt(aTimeSplit[0]) - parseInt(bTimeSplit[0]);
+    comparisonResult = (comparisonResult === 0) ? (parseInt(aTimeSplit[1]) - parseInt(bTimeSplit[1])) : comparisonResult;
+    
+    return (comparisonResult < 0);
 }
 
+
+/* 
+Construsts a tree with the event details for easy, quick access --
+y_YYYY : {
+    m_MM : {
+        d_DD: [
+            { event_1_UID : event_1 },
+            { event_2_UID : event_2 }
+        ]
+    }
+}
+*/
 export const insertIntoFormattedEventsObj = (formattedEventsObj, event) => {
     const dateObj = event.startDateTime;
     const year_key = `y_${format(dateObj, DATE_FORMAT.fullYear)}`;
@@ -92,6 +96,7 @@ export const convertTimeStringToDateObj = (timeStr, dateObj) => {
     duplicateDateObj.setMinutes(timeStrArray[1]);
     return duplicateDateObj;
 }
+
 export const convertDateObjToTimeString = (dateObj) => {
     if (!dateObj){ return '' };
 

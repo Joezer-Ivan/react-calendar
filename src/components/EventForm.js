@@ -1,12 +1,12 @@
 import React, {useState, useContext} from 'react'
 import { EventScheduleContext } from './Calendar'
-import { isTimeStrInOrder, convertDateObjToTimeString, convertTimeStringToDateObj } from '../utils/generalUtils'
+import { isTimeStrInAscendingOrder, convertDateObjToTimeString, convertTimeStringToDateObj } from '../utils/generalUtils'
 
 function EventForm(props) {
     const eventDetails = props.event || {};
     const [subject, setSubject] = useState(eventDetails.subject || '');
-    const [startTimeString, setStartTimeString] = useState(convertDateObjToTimeString(eventDetails.startDateTime) || '08:00');
-    const [endTimeString, setEndTimeString] = useState(convertDateObjToTimeString(eventDetails.endDateTime) || '18:00');
+    const [startTimeString, setStartTimeString] = useState(convertDateObjToTimeString(eventDetails.startDateTime) || '08:00'); //converting the dateTime object to a time string of the format HH:MM
+    const [endTimeString, setEndTimeString] = useState(convertDateObjToTimeString(eventDetails.endDateTime) || '18:00'); //converting the dateTime object to a time string of the format HH:MM
     const [location, setLocation] = useState(eventDetails.location || '');
     const [description, setDescription] = useState(eventDetails.description || '');
     const [subjectErrorMessage, setSubjectErrorMessage] = useState('')
@@ -25,7 +25,7 @@ function EventForm(props) {
             timeError = 'Start and End time cannot be empty';
             isValid = false;
         }
-        if (!isTimeStrInOrder(startTimeString, endTimeString)){
+        if (!isTimeStrInAscendingOrder(startTimeString, endTimeString)){
             timeError = 'End Time must be ahead of start time';
             isValid = false;
         }
@@ -47,8 +47,8 @@ function EventForm(props) {
                 subject,
                 location,
                 description,
-                startDateTime : convertTimeStringToDateObj(startTimeString, props.date),
-                endDateTime : convertTimeStringToDateObj(endTimeString, props.date),
+                startDateTime : convertTimeStringToDateObj(startTimeString, props.date), //converting the time string back to a dateTime object
+                endDateTime : convertTimeStringToDateObj(endTimeString, props.date), //converting the time string back to a dateTime object
             };
             eventScheduleContext.eventScheduleDispatch({
                 type : dispatchType,
