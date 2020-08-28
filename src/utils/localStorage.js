@@ -9,7 +9,7 @@ const convertUtcStringToUserTzDateObj = (event) => {
     event.endDateTime = new Date(event.endDateTime.toString());
 }
 const fetchEvents = () => {
-    let jsonStr = localStorage.getItem('calendar-scheduled-events') || '{}';
+    let jsonStr = localStorage.getItem('calendar-scheduled-events-v2') || '{}';
     return JSON.parse(jsonStr);
 }
 
@@ -37,5 +37,5 @@ export const setEventsToLocalStorage = (action, event) => {
             break;
     }
     
-    localStorage.setItem('calendar-scheduled-events', JSON.stringify(eventsObj));
+    localStorage.setItem('calendar-scheduled-events-v2', JSON.stringify(eventsObj));
 }
