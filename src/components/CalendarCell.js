@@ -24,7 +24,7 @@ function CalendarCell(props) {
     }
 
     useEffect(() => {
-        // show a more items label if events list overflow out of the cell
+        // show a more items label if events list overflows out of the cell
         (cellContainerRef.current.scrollHeight - cellContainerRef.current.clientHeight) > 0 ? setEventListOverflow(true) : setEventListOverflow(false);
     }, [eventsObj])
     
@@ -37,7 +37,6 @@ function CalendarCell(props) {
             className={`column cell ${conditionalClassNames}`}
             ref={cellContainerRef}
             onClick={() => props.onDateClick(props.day)}
-            data-testid={ isSameDay(props.day, props.todaysDate) && 'todaysCell' }
         >
             <span className="number">{format(props.day, DATE_FORMAT.dayOfMonth)}</span>
             <ul className="ul-no-bullets cell-event-list">{eventList}</ul>
