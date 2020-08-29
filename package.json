@@ -4,12 +4,10 @@
   "private": true,
   "homepage": "https://joezer-ivan.github.io/react-calendar/",
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^10.4.9",
-    "@testing-library/user-event": "^7.1.2",
     "date-fns": "^2.15.0",
     "gh-pages": "^3.1.0",
-    "jest-dom": "^4.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
@@ -37,5 +35,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

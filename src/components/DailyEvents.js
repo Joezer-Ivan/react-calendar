@@ -21,11 +21,11 @@ function DailyEvents(props) {
     return (
         <React.Fragment>
             <div className="modalMask" onClick={() => props.setEventsView(false)}></div>
-            <div className="popover modal daily-events">
+            <div className="popover modal daily-events" data-testid="dayView">
                 <div className="header flex-bx flex-between">
                     <span>{format(props.selectedDate, DATE_FORMAT.fullDate)}</span>
                     <div>
-                        <button className='mr10 btn-primary' onClick={() => setShowNewEventForm(true)}>
+                        <button className='mr10 btn-primary' data-testid="newEventBtn" onClick={() => setShowNewEventForm(true)}>
                             <span className="icon">add</span>
                             New Event
                         </button>

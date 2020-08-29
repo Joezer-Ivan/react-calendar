@@ -70,10 +70,11 @@ function EventForm(props) {
                         autoFocus={true}
                         value={subject}
                         onChange={(ev) => setSubject(ev.target.value)}
+                        aria-label="subject"
                     />
                 </span>
                 {subjectErrorMessage && 
-                    <div className="form-validation-error">{subjectErrorMessage}</div>
+                    <div className="form-validation-error" data-testid="subjectErrorMessage">{subjectErrorMessage}</div>
                 }
                 <span className="form-row">
                     <label htmlFor="startTime">Start time<span className="mandatory-field">*</span></label>
@@ -83,6 +84,7 @@ function EventForm(props) {
                         type="time"
                         value={startTimeString}
                         onChange={(ev) => setStartTimeString(ev.target.value)}
+                        aria-label="startTime"
                     />
                     <label htmlFor="endTime">End time<span className="mandatory-field">*</span></label>
                     <input
@@ -90,10 +92,11 @@ function EventForm(props) {
                         type="time"
                         value={endTimeString}
                         onChange={(ev) => setEndTimeString(ev.target.value)}
+                        aria-label="endTime"
                     />
                 </span>
                 {timeErrorMessage && 
-                    <div className="form-validation-error">{timeErrorMessage}</div>
+                    <div className="form-validation-error" data-testid="timeErrorMessage">{timeErrorMessage}</div>
                 }
                 <span className="form-row">
                     <label htmlFor="location">Location</label>
@@ -102,6 +105,7 @@ function EventForm(props) {
                         type="text"
                         value={location}
                         onChange={(ev) => setLocation(ev.target.value)}
+                        aria-label="location"
                     />
                 </span>
                 <span className="form-row">
@@ -111,10 +115,11 @@ function EventForm(props) {
                         type="text"
                         value={description}
                         onChange={(ev) => setDescription(ev.target.value)}
+                        aria-label="description"
                     />
                 </span>
 
-                <button type="submit" className="mr10 btn-primary">Save</button>
+                <button type="submit" className="mr10 btn-primary" data-testid="submitEventForm">Save</button>
                 <button type="cancel" onClick={() => props.closeFormCallBack()}>Cancel</button>
             </form>
         </li>

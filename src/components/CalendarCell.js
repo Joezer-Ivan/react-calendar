@@ -37,6 +37,7 @@ function CalendarCell(props) {
             className={`column cell ${conditionalClassNames}`}
             ref={cellContainerRef}
             onClick={() => props.onDateClick(props.day)}
+            data-testid={isSameDay(props.day, props.todaysDate) && 'todaysCell'}
         >
             <span className="number">{format(props.day, DATE_FORMAT.dayOfMonth)}</span>
             <ul className="ul-no-bullets cell-event-list">{eventList}</ul>
