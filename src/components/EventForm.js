@@ -24,8 +24,7 @@ function EventForm(props) {
         if (startTimeString.trim() === '' || endTimeString.trim() === ''){
             timeError = 'Start and End time cannot be empty';
             isValid = false;
-        }
-        if (!isTimeStrInAscendingOrder(startTimeString, endTimeString)){
+        } else if (!isTimeStrInAscendingOrder(startTimeString, endTimeString)){
             timeError = 'End Time must be ahead of start time';
             isValid = false;
         }
@@ -62,7 +61,7 @@ function EventForm(props) {
         <li className='event-card'>
             <form className='event-form' onSubmit={handleFormSubmit}>
                 <span className="form-row">
-                    <label htmlFor="subject">Subject *</label>
+                    <label htmlFor="subject">Subject<span className="mandatory-field">*</span></label>
                     <input
                         name="subject"
                         type="type"
@@ -77,7 +76,7 @@ function EventForm(props) {
                     <div className="form-validation-error">{subjectErrorMessage}</div>
                 }
                 <span className="form-row">
-                    <label htmlFor="startTime">Start time</label>
+                    <label htmlFor="startTime">Start time<span className="mandatory-field">*</span></label>
                     <input
                         className="mr10"
                         name="startTime"
@@ -85,7 +84,7 @@ function EventForm(props) {
                         value={startTimeString}
                         onChange={(ev) => setStartTimeString(ev.target.value)}
                     />
-                    <label htmlFor="endTime">End time</label>
+                    <label htmlFor="endTime">End time<span className="mandatory-field">*</span></label>
                     <input
                         name="endTime"
                         type="time"
